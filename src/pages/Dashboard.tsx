@@ -47,27 +47,27 @@ export default function DashboardPage() {
 
       <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">
-          <CardHeader className="pb-2 sm:pb-6">
+          <CardHeader className="pb-2 sm:pb-6 px-3 sm:px-6">
             <CardTitle className="text-sm sm:text-base">Chiffre d'affaires (7 jours)</CardTitle>
           </CardHeader>
-          <CardContent className="px-2 sm:px-6">
-            <div className="h-[200px] sm:h-[300px]">
+          <CardContent className="px-0 sm:px-6">
+            <div className="h-[180px] sm:h-[300px]">
               <RevenueChart data={revenue7Days} days={7} />
             </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-2 sm:pb-6">
+          <CardHeader className="pb-2 sm:pb-6 px-3 sm:px-6">
             <CardTitle className="text-sm sm:text-base">Top 5 plats</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {topProducts.length === 0 && (
-                <p className="text-sm text-muted-foreground">Aucune donnée</p>
-              )}
+          <CardContent className="px-3 sm:px-6">
+            {topProducts.length === 0 && (
+              <p className="text-sm text-muted-foreground py-4 text-center">Aucune donnée</p>
+            )}
+            <div className="divide-y">
               {topProducts.map((p, i) => (
-                <div key={p.name} className="flex items-center gap-3">
+                <div key={p.name} className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
                   <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-brand/20 text-sm font-bold text-brand-dark dark:text-brand">
                     {i + 1}
                   </span>
