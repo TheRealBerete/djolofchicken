@@ -39,9 +39,10 @@ export default function OrdersPage() {
   };
 
   const exportCSV = () => {
-    const headers = "ID,Client,Téléphone,Quartier,Plats,Total,Frais livraison,Total final,Statut,Motard,Livrée le,Créée le\n";
+    const headers = "Référence,ID,Client,Téléphone,Quartier,Plats,Total,Frais livraison,Total final,Statut,Motard,Livrée le,Créée le\n";
     const rows = allOrders.map((o) =>
       [
+        o.reference || "",
         o.id,
         `"${o.customer_name}"`,
         o.customer_phone,
@@ -125,7 +126,7 @@ export default function OrdersPage() {
                   onClick={() => setSelectedOrder(o)}
                   className="font-mono text-xs text-muted-foreground hover:underline"
                 >
-                  #{o.id}
+                  {o.reference || `#${o.id}`}
                 </button>
                 <StatusBadge status={o.status} />
               </div>
@@ -171,7 +172,7 @@ export default function OrdersPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b bg-muted/50 text-left">
-                <th className="px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap">ID</th>
+                <th className="px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap">Réf.</th>
                 <th className="px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap">Client</th>
                 <th className="px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap hidden lg:table-cell">Quartier</th>
                 <th className="px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap">Plats</th>
@@ -184,7 +185,7 @@ export default function OrdersPage() {
             <tbody>
               {orders.map((o) => (
                 <tr key={o.id} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
-                  <td className="px-4 py-3 font-mono text-xs">#{o.id}</td>
+                  <td className="px-4 py-3 font-mono text-xs">{o.reference || `#${o.id}`}</td>
                   <td className="px-4 py-3">
                     <button
                       onClick={() => setSelectedOrder(o)}

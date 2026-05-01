@@ -5,6 +5,7 @@ import { playNotificationSound } from "@/lib/notifications";
 export interface AppNotification {
   id: number;
   orderId: number;
+  reference: string | null;
   customerName: string;
   createdAt: number;
   dismissed: boolean;
@@ -20,10 +21,11 @@ export function useNotifications() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "djolof_orders" },
         (payload) => {
-          const order = payload.new as { id: number; customer_name: string };
+          const order = payload.new as { id: number; reference: string | null; customer_name: string };
           const notification: AppNotification = {
             id: Date.now(),
             orderId: order.id,
+            reference: order.reference || null,
             customerName: order.customer_name,
             createdAt: Date.now(),
             dismissed: false,

@@ -29,7 +29,7 @@ export function NotificationToast({ notifications, onDismiss }: Props) {
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold">Nouvelle commande !</p>
             <p className="text-sm text-muted-foreground truncate">
-              #{n.orderId} — {n.customerName}
+              {n.reference || `#${n.orderId}`} — {n.customerName}
             </p>
           </div>
           <button

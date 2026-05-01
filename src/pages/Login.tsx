@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useThemeMode } from "@/hooks/useThemeMode";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { LogIn } from "lucide-react";
+import { LogIn, Sun, Moon } from "lucide-react";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const { resolved, toggle } = useThemeMode();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -19,6 +21,15 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <button
+        onClick={toggle}
+        className="fixed top-4 right-4 rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors border"
+        aria-label={resolved === "dark" ? "Mode clair" : "Mode sombre"}
+        title={resolved === "dark" ? "Mode clair" : "Mode sombre"}
+      >
+        {resolved === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+      </button>
+
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <div className="mx-auto mb-3">

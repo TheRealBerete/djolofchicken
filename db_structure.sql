@@ -12,7 +12,9 @@ create table public.djolof_orders (
   delivered_at timestamp without time zone null,
   created_at timestamp without time zone not null default now(),
   updated_at timestamp without time zone not null default now(),
-  constraint djolof_orders_id_key unique (id)
+  reference character varying(20) null,
+  constraint djolof_orders_id_key unique (id),
+  constraint djolof_orders_reference_key unique (reference)
 ) TABLESPACE pg_default;
 
 create index IF not exists idx_djolof_orders_phone on public.djolof_orders using btree (customer_phone) TABLESPACE pg_default;
@@ -26,6 +28,30 @@ create index IF not exists idx_orders_status on public.djolof_orders using btree
 create index IF not exists idx_orders_created_at on public.djolof_orders using btree (created_at desc) TABLESPACE pg_default;
 
 create index IF not exists idx_orders_phone on public.djolof_orders using btree (customer_phone) TABLESPACE pg_default;
+
+create index IF not exists idx_djolof_orders_reference on public.djolof_orders using btree (reference) TABLESPACE pg_default;
+
+CREATE SEQUENCE IF NOT EXISTS order_ref_seq START 1001;
+
+CREATE OR REPLACE FUNCTION generate_order_reference()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.reference := 'DC-' || LPAD(nextval('order_ref_seq')::TEXT, 6, '0');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_trigger WHERE tgname = 'trigger_generate_order_reference'
+  ) THEN
+    CREATE TRIGGER trigger_generate_order_reference
+      BEFORE INSERT ON djolof_orders
+      FOR EACH ROW
+      EXECUTE FUNCTION generate_order_reference();
+  END IF;
+END $$;
 
 
 create table public.djolof_menus (

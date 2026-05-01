@@ -21,8 +21,32 @@ CREATE TABLE IF NOT EXISTS public.djolof_orders (
   delivered_at TIMESTAMP NULL,
   created_at TIMESTAMP NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
-  CONSTRAINT djolof_orders_id_key UNIQUE (id)
+  reference VARCHAR(20) NULL,
+  CONSTRAINT djolof_orders_id_key UNIQUE (id),
+  CONSTRAINT djolof_orders_reference_key UNIQUE (reference)
 );
+
+CREATE SEQUENCE IF NOT EXISTS order_ref_seq START 1001;
+
+CREATE OR REPLACE FUNCTION generate_order_reference()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.reference := 'DC-' || LPAD(nextval('order_ref_seq')::TEXT, 6, '0');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_trigger WHERE tgname = 'trigger_generate_order_reference'
+  ) THEN
+    CREATE TRIGGER trigger_generate_order_reference
+      BEFORE INSERT ON djolof_orders
+      FOR EACH ROW
+      EXECUTE FUNCTION generate_order_reference();
+  END IF;
+END $$;
 
 CREATE INDEX IF NOT EXISTS idx_djolof_orders_phone ON public.djolof_orders (customer_phone);
 CREATE INDEX IF NOT EXISTS idx_djolof_orders_status ON public.djolof_orders (status);
@@ -30,6 +54,7 @@ CREATE INDEX IF NOT EXISTS idx_djolof_orders_created ON public.djolof_orders (cr
 CREATE INDEX IF NOT EXISTS idx_orders_status ON public.djolof_orders (status);
 CREATE INDEX IF NOT EXISTS idx_orders_created_at ON public.djolof_orders (created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_orders_phone ON public.djolof_orders (customer_phone);
+CREATE INDEX IF NOT EXISTS idx_djolof_orders_reference ON public.djolof_orders (reference);
 
 CREATE TABLE IF NOT EXISTS public.djolof_menus (
   id SERIAL NOT NULL,

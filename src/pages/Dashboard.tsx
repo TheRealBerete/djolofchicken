@@ -95,7 +95,7 @@ export default function DashboardPage() {
             {recentOrders.map((o) => (
               <div key={o.id} className="p-4 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs text-muted-foreground">#{o.id}</span>
+                  <span className="font-mono text-xs text-muted-foreground">{o.reference || `#${o.id}`}</span>
                   <StatusBadge status={o.status} />
                 </div>
                 <p className="font-medium text-sm">{o.customer_name}</p>
@@ -112,7 +112,7 @@ export default function DashboardPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left">
-                  <th className="pb-3 font-semibold text-muted-foreground">ID</th>
+                  <th className="pb-3 font-semibold text-muted-foreground">Réf.</th>
                   <th className="pb-3 font-semibold text-muted-foreground">Client</th>
                   <th className="pb-3 font-semibold text-muted-foreground">Plats</th>
                   <th className="pb-3 font-semibold text-muted-foreground">Total</th>
@@ -123,7 +123,7 @@ export default function DashboardPage() {
               <tbody>
                 {recentOrders.map((o) => (
                   <tr key={o.id} className="border-b last:border-0">
-                    <td className="py-3 font-mono text-xs">#{o.id}</td>
+                    <td className="py-3 font-mono text-xs">{o.reference || `#${o.id}`}</td>
                     <td className="py-3 font-medium">{o.customer_name}</td>
                     <td className="py-3 text-muted-foreground max-w-[200px] truncate">{o.items}</td>
                     <td className="py-3 font-semibold">{formatCurrency(o.final_total)}</td>

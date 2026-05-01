@@ -14,6 +14,7 @@ export interface Order {
   delivered_at: string | null;
   created_at: string;
   updated_at: string;
+  reference: string | null;
 }
 
 export type OrderStatus = "en_cuisine" | "prete" | "en_livraison" | "livree" | "annulee";

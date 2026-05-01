@@ -15,7 +15,7 @@ export function OrderDetailsModal({
   if (!order) return null;
 
   return (
-    <Dialog open={open} onClose={onClose} title={`Commande #${order.id}`}>
+    <Dialog open={open} onClose={onClose} title={`Commande ${order.reference || `#${order.id}`}`}>
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <StatusBadge status={order.status} />

@@ -7,6 +7,7 @@ import OrdersPage from "@/pages/Orders";
 import MenuPage from "@/pages/MenuPage";
 import StatsPage from "@/pages/Stats";
 import SettingsPage from "@/pages/Settings";
+import OrderCheckPage from "@/pages/OrderCheck";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -36,6 +37,7 @@ function AppRoutes() {
         <Route path="/stats" element={<StatsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
+      <Route path="/check/:reference?" element={<OrderCheckPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
